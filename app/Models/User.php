@@ -48,6 +48,21 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function isAdmin(): bool{
+        if($this->role=='admin'){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    function isCustomer(): bool{
+        if($this->role=='customer'){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public function rentals():HasMany{
         return $this->hasMany(Rental::class);
     }
