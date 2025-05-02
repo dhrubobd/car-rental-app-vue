@@ -6,6 +6,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -21,31 +22,31 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Harry Potter',
                 'email' => 'admin@admin.com',
-                'password' => 'admin',
+                'password' => Hash::make('admin'),
                 'role' => 'admin',
             ],
             [
                 'name' => 'Hasnat Abdullah',
                 'email' => Str::random(10).'@example.com',
-                'password' => Str::random(7),
+                'password' => Hash::make('password'),
                 'role' => 'customer',
             ],
             [
                 'name' => 'Dipty Chowdhruy',
                 'email' => Str::random(10).'@example.com',
-                'password' => Str::random(7),
+                'password' => Hash::make('password'),
                 'role' => 'customer',
             ],
             [
                 'name' => 'Sarjis Alom',
                 'email' => Str::random(10).'@example.com',
-                'password' => Str::random(7),
+                'password' => Hash::make('password'),
                 'role' => 'customer',
             ],
             [
                 'name' => 'Sadia Sraboni',
                 'email' => Str::random(10).'@example.com',
-                'password' => Str::random(7),
+                'password' => Hash::make('password'),
                 'role' => 'customer',
             ],
         ]);
