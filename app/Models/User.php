@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Rental;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -49,18 +50,28 @@ class User extends Authenticatable
         ];
     }
 
-    public function isAdmin(): bool{
-        if($this->role=='admin'){
-            return true;
-        }else{
-            return false;
+    public static function isAdmin():bool{
+        if (Auth::check()){
+            $userID = Auth::user()->id;
+            $theUser= User::where('id','=',$userID)
+             ->select(['role'])->first();
+            if($theUser->role=="admin"){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
-    function isCustomer(): bool{
-        if($this->role=='customer'){
-            return true;
-        }else{
-            return false;
+    public static function isCustomer():bool{
+        if (Auth::check()){
+            $userID = Auth::user()->id;
+            $theUser= User::where('id','=',$userID)
+             ->select(['role'])->first();
+            if($theUser->role=="customer"){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
     public function rentals():HasMany{

@@ -1,5 +1,5 @@
 <script setup>
-import Sidebar from './DashboardSidebar.vue';
+import Sidebar from './Sidebar.vue';
 </script>
 <template>
     <div class="h-screen">

@@ -27,9 +27,12 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+        
         if ($user->role !== 'admin') {
-            Auth::logout();
-            return redirect()->back()->with('error','You do not have permission to access this page');
+            //Auth::logout();
+            //return redirect()->back()->with('error','You do not have permission to access this page');
+            return Inertia::render('Home');
+
         }else{
             return  redirect()->route('page.dashboard')->with('success','Login successful');
         }
