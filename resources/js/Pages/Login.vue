@@ -35,7 +35,15 @@ const submitForm = () => {
         }
     });
 };
-    
+onMounted(() => {
+        if (flash.value.success) {
+            toast.success(flash.value.success);
+        }
+        if (flash.value.error) {
+            toast.error(flash.value.error);
+        }
+    });
+
 
 </script>
 <template>

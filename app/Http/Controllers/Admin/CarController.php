@@ -46,15 +46,23 @@ class CarController extends Controller
         }
     }
 
-    function deleteCar(Request $request){
-        if($this->isAdmin($request)==true){
-            $carID=$request->input('id');
-            $filePath=$request->input('file_path');
-            File::delete($filePath);
-            return Car::where('id',$carID)->delete();
-        }else{
-            return view('page.auth.login-page');
+    function deleteCar(String $id){
+        try {
+            
+            $theCar = Car::findOrFail($id);
+            $theImagePath = $theCar->image;
+            if ($theImagePath == null) {
+                return $theCar->delete();
+            }
+            //$theImagePath = public_path($theImagePath);
+            File::delete($theImagePath);
+            $theCar->delete();
+            return redirect()->back()->with('success', 'Car Deleted Successfully');
+        } catch (\Throwable $th) {
+            //throw $th;
         }
+
+            
     }
 
     function carByID(Request $request){

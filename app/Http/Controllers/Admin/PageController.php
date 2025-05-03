@@ -14,26 +14,8 @@ use Illuminate\Support\Facades\Auth;
 class PageController extends Controller
 {
 
-    function dashboardView(Request $request){
-        /*
-        if (Auth::check()){
-            $userID = Auth::user()->id;
-            $theUser= User::where('id','=',$userID)
-             ->select(['role'])->first();
-            if($theUser->role=="admin"){
-                return inertia('Backend/Dashboard');
-            }else{
-                return redirect()->route('page.login')->with('error','You do not have permission to access this page');
-            }
-        }
-        */
-        if(User::isAdmin($request)==false){
-            return redirect()->route('page.login')->with('error','You do not have permission to access this page');
-        }
-        return inertia('Backend/Dashboard');
-        
-            
-        
+    function dashboardView(Request $request){ 
+        return inertia('Backend/Dashboard');   
     }
     function dashboardData(){
         try {
@@ -79,8 +61,15 @@ class PageController extends Controller
 
     function carData(){
         try {
+            /*
             return Car::query()
             ->orderBy('updated_at', 'desc')->get();
+            */
+            $cars = Car::all();
+            return inertia('Backend/Cars/ListCar', [
+                'cars' => $cars,
+            ]);
+
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'failed',

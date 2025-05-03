@@ -50,7 +50,7 @@ class User extends Authenticatable
         ];
     }
 
-    public static function isAdmin():bool{
+    public static function isAdmin(){
         if (Auth::check()){
             $userID = Auth::user()->id;
             $theUser= User::where('id','=',$userID)
@@ -62,7 +62,7 @@ class User extends Authenticatable
             }
         }
     }
-    public static function isCustomer():bool{
+    public static function isCustomer(){
         if (Auth::check()){
             $userID = Auth::user()->id;
             $theUser= User::where('id','=',$userID)

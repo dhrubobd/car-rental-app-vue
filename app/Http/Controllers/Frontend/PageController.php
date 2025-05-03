@@ -10,6 +10,7 @@ class PageController extends Controller
         return view('page.customer.cars');
     }
     function manageBookingView(){
-        return view('page.customer.manage-bookings');
+        //return view('page.customer.manage-bookings');
+        return inertia('Frontend/Booking/ManageBooking');
     }
 }
