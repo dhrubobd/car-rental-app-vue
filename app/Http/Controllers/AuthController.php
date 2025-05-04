@@ -29,18 +29,16 @@ class AuthController extends Controller
         $user = Auth::user();
         
         if ($user->role !== 'admin') {
-            //Auth::logout();
-            //return redirect()->back()->with('error','You do not have permission to access this page');
-            return Inertia::render('Home');
+            return  redirect()->route('page.manage-booking')->with('success','Login successful');
 
         }else{
-            return  redirect()->route('page.dashboard')->with('success','Login successful');
+            return  redirect()->route('dashboard')->with('success','Login successful');
         }
         
     }
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('page.login')->with('success','Logout successful');
+        return redirect()->route('login')->with('success','Logout successful');
     }
 }

@@ -11,6 +11,54 @@ use Illuminate\Support\Facades\File;
 class CarController extends Controller
 {
     function createCar(Request $request){
+        return inertia('Backend/Cars/AddCar');  
+    }
+    function saveCar(Request $request){
+        
+        $request->validate([
+            'name' => 'required',
+            'brand' => 'required',
+            'model' => 'required',
+            'year' => 'required|numeric',
+            'car_type' => 'required',
+            'daily_rent_price' => 'required|numeric',
+            'availability' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        try {
+            // Prepare Car Image File Name & Path
+            $img=$request->file('image');
+
+            $t=time();
+            $file_name=$img->getClientOriginalName();
+            $img_name="car-{$t}-{$file_name}";
+            $img_url="uploads/{$img_name}";
+
+
+            // Upload Car Image File
+            $img->move(public_path('uploads'),$img_name);
+
+            if($request->input('availability')=="1"){
+                $carAvailability = true;
+            }else{
+                $carAvailability = false;
+            }
+            Car::create([
+                'name'=>$request->input('name'),
+                'brand'=>$request->input('brand'),
+                'model'=>$request->input('model'),
+                'year'=>$request->input('year'),
+                'car_type'=>$request->input('car_type'),
+                'daily_rent_price'=>$request->input('daily_rent_price'),
+                'availability'=>$carAvailability,
+                'image'=>$img_url,
+            ]);
+            return redirect()->route('dashboard.cars')->with('success', 'Car Created Successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Car Creation Failed');
+        }
+
+        /*
         if($this->isAdmin($request)==true){
             // Prepare Car Image File Name & Path
             $img=$request->file('carImg');
@@ -44,6 +92,7 @@ class CarController extends Controller
         }else{
             return view('page.auth.login-page');
         }
+        */
     }
 
     function deleteCar(String $id){

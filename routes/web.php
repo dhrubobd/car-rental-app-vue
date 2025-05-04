@@ -11,13 +11,15 @@ Route::get('/', function () {
     return inertia('Home');
 });
 
-Route::get('/login',[AuthController::class, 'loginPage'])->name('page.login');
+Route::get('/login',[AuthController::class, 'loginPage'])->name('login');
 Route::post('/login',[AuthController::class, 'login'])->name('post.login');
 Route::get('/logout',[AuthController::class, 'logout'])->name('page.logout');
 
-Route::middleware(['web','auth','RoleMiddleware:admin'])->group(function () {
+Route::middleware(['RoleMiddleware:admin'])->group(function () {
     Route::get('/dashboard',[AdminPageController::class, 'dashboardView'])->name('dashboard');
     Route::get('/dashboard/cars',[AdminPageController::class, 'carData'])->name('dashboard.cars');
+    Route::get('/dashboard/cars/create',[AdminCarController::class, 'createCar'])->name('dashboard.cars.create');
+    Route::post('/dashboard/cars/create',[AdminCarController::class, 'saveCar'])->name('dashboard.cars.save');
     Route::delete('/dashboard/cars/{id}',[AdminCarController::class, 'deleteCar'])->name('dashboard.cars.delete');
 
 });
