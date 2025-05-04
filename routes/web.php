@@ -20,6 +20,8 @@ Route::middleware(['RoleMiddleware:admin'])->group(function () {
     Route::get('/dashboard/cars',[AdminPageController::class, 'carData'])->name('dashboard.cars');
     Route::get('/dashboard/cars/create',[AdminCarController::class, 'createCar'])->name('dashboard.cars.create');
     Route::post('/dashboard/cars/create',[AdminCarController::class, 'saveCar'])->name('dashboard.cars.save');
+    Route::get('/dashboard/cars/{id}/edit',[AdminCarController::class, 'editCar'])->name('dashboard.cars.edit');
+    Route::put('/dashboard/cars/{id}/edit',[AdminCarController::class, 'updateCar'])->name('dashboard.cars.update');
     Route::delete('/dashboard/cars/{id}',[AdminCarController::class, 'deleteCar'])->name('dashboard.cars.delete');
 
 });

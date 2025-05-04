@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\car;
 use App\Models\user;
+use Dotenv\Util\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -57,61 +58,21 @@ class CarController extends Controller
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Car Creation Failed');
         }
-
-        /*
-        if($this->isAdmin($request)==true){
-            // Prepare Car Image File Name & Path
-            $img=$request->file('carImg');
-
-            $t=time();
-            $file_name=$img->getClientOriginalName();
-            $img_name="car-{$t}-{$file_name}";
-            $img_url="uploads/{$img_name}";
-
-
-            // Upload Car Image File
-            $img->move(public_path('uploads'),$img_name);
-
-            if($request->input('carAvailability')=="1"){
-                $carAvailability = true;
-            }else{
-                $carAvailability = false;
-            }
-            
-            // Save To Database
-            return Car::create([
-                'name'=>$request->input('carName'),
-                'brand'=>$request->input('carBrand'),
-                'model'=>$request->input('carModel'),
-                'year'=>$request->input('carYear'),
-                'car_type'=>$request->input('carType'),
-                'daily_rent_price'=>$request->input('carRentPrice'),
-                'availability'=>$carAvailability,
-                'image'=>$img_url,
-            ]);
-        }else{
-            return view('page.auth.login-page');
-        }
-        */
     }
 
     function deleteCar(String $id){
         try {
-            
             $theCar = Car::findOrFail($id);
             $theImagePath = $theCar->image;
             if ($theImagePath == null) {
                 return $theCar->delete();
             }
-            //$theImagePath = public_path($theImagePath);
             File::delete($theImagePath);
             $theCar->delete();
             return redirect()->back()->with('success', 'Car Deleted Successfully');
         } catch (\Throwable $th) {
-            //throw $th;
-        }
-
-            
+            return redirect()->back()->with('error', 'Car Deletion Failed');
+        } 
     }
 
     function carByID(Request $request){
@@ -122,20 +83,37 @@ class CarController extends Controller
             return view('page.auth.login-page');
         }
     }
-    function updateCar(Request $request){
-        if($this->isAdmin($request)==true){
-            $carID=$request->input('id');
-
-            if($request->input('carAvailability')=="1"){
+    function editCar(String $id){
+        $carID=$id;
+        $theCar = Car::where('id',$carID)->first();
+        return inertia('Backend/Cars/EditCar', [
+            'car' => $theCar,
+        ]);
+    }
+    function updateCar(Request $request, String $id){
+        $request->validate([
+            'name' => 'required',
+            'brand' => 'required',
+            'model' => 'required',
+            'year' => 'required|numeric',
+            'car_type' => 'required',
+            'daily_rent_price' => 'required|numeric',
+            'availability' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        try {
+            
+            $carID=$id;
+            if($request->input('availability')=="1"){
                 $carAvailability = true;
             }else{
                 $carAvailability = false;
             }
 
-            if ($request->hasFile('carImage')) {
-
+            if ($request->hasFile('image')) {
+                
                 // Upload New Car Photo File
-                $img=$request->file('carImage');
+                $img=$request->file('image');
                 $t=time();
                 $file_name=$img->getClientOriginalName();
                 $img_name="car-{$t}-{$file_name}";
@@ -149,31 +127,34 @@ class CarController extends Controller
                 File::delete($filePath);
 
                 // Update Car
-                return Car::where('id',$carID)->update([
-                    'name'=>$request->input('carName'),
-                    'brand'=>$request->input('carBrand'),
-                    'model'=>$request->input('carModel'),
-                    'year'=>$request->input('carYear'),
-                    'car_type'=>$request->input('carType'),
-                    'daily_rent_price'=>$request->input('carRentPrice'),
+                Car::where('id',$carID)->update([
+                    'name'=>$request->input('name'),
+                    'brand'=>$request->input('brand'),
+                    'model'=>$request->input('model'),
+                    'year'=>$request->input('year'),
+                    'car_type'=>$request->input('car_type'),
+                    'daily_rent_price'=>$request->input('daily_rent_price'),
                     'availability'=>$carAvailability,
                     'image'=>$img_url,
                 ]);
+                return redirect()->route('dashboard.cars')->with('success', 'Car Updated Successfully');
 
             }
             else {
-                return Car::where('id',$carID)->update([
-                    'name'=>$request->input('carName'),
-                    'brand'=>$request->input('carBrand'),
-                    'model'=>$request->input('carModel'),
-                    'year'=>$request->input('carYear'),
-                    'car_type'=>$request->input('carType'),
-                    'daily_rent_price'=>$request->input('carRentPrice'),
+                
+                Car::where('id',$carID)->update([
+                    'name'=>$request->input('name'),
+                    'brand'=>$request->input('brand'),
+                    'model'=>$request->input('model'),
+                    'year'=>$request->input('year'),
+                    'car_type'=>$request->input('car_type'),
+                    'daily_rent_price'=>$request->input('daily_rent_price'),
                     'availability'=>$carAvailability,
                 ]);
+                return redirect()->route('dashboard.cars')->with('success', 'Car Updated Successfully');
             }
-        }else{
-            return view('page.auth.login-page');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Car Update Failed');
         }
     }
 

@@ -64,7 +64,7 @@ const deleteCar = (id) => {
                         <td class="p-3">{{ car.daily_rent_price }}</td> 
                         <td class="p-3">{{ car.availability ? 'Available' : 'Not Available' }}</td> 
                         <td class="p-3 space-x-2">
-                        <Link :href="`dashboard/cars/${car.id}/edit`" class="bg-yellow-500 text-white px-2 py-1 rounded-md cursor-pointer">Edit</Link>
+                        <Link :href="`/dashboard/cars/${car.id}/edit`" class="bg-yellow-500 text-white px-2 py-1 rounded-md cursor-pointer">Edit</Link>
                         <button @click="deleteCar(car.id)" class="bg-red-500 text-white px-2 py-1 rounded-md cursor-pointer">Delete</button>
                         </td>
                     </tr>
