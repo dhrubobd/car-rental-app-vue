@@ -76,12 +76,14 @@ class CarController extends Controller
     }
 
     function carByID(Request $request){
+        /*
         if($this->isAdmin($request)==true){
             $carID=$request->input('id');
             return Car::where('id',$carID)->first();
         }else{
             return view('page.auth.login-page');
         }
+        */  
     }
     function editCar(String $id){
         $carID=$id;
@@ -155,17 +157,6 @@ class CarController extends Controller
             }
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Car Update Failed');
-        }
-    }
-
-    function isAdmin(Request $request){
-        $userID = $request->header('id');
-        $theUser= User::where('id','=',$userID)
-             ->select(['role'])->first();
-        if($theUser->role=="admin"){
-            return true;
-        }else{
-            return false;
         }
     }
 }

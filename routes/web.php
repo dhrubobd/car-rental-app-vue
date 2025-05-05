@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\CarController as AdminCarController;
+use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Frontend\CarController as FrontendCarController;
 use App\Http\Controllers\Frontend\PageController as FrontendPageController;
 
@@ -23,6 +24,14 @@ Route::middleware(['RoleMiddleware:admin'])->group(function () {
     Route::get('/dashboard/cars/{id}/edit',[AdminCarController::class, 'editCar'])->name('dashboard.cars.edit');
     Route::put('/dashboard/cars/{id}/edit',[AdminCarController::class, 'updateCar'])->name('dashboard.cars.update');
     Route::delete('/dashboard/cars/{id}',[AdminCarController::class, 'deleteCar'])->name('dashboard.cars.delete');
+    Route::get('/dashboard/customers',[AdminPageController::class, 'manageCustomers'])->name('dashboard.customers');
+    // Add Customer
+    Route::get('/dashboard/customers/create',[AdminCustomerController::class, 'createCustomer'])->name('dashboard.customers.create');
+    Route::post('/dashboard/customers/create',[AdminCustomerController::class, 'saveCustomer'])->name('dashboard.customers.save');
+    // Update Customer
+    Route::get('/dashboard/customers/{id}/edit',[AdminCustomerController::class, 'editCustomer'])->name('dashboard.customers.edit');
+    Route::put('/dashboard/customers/{id}/edit',[AdminCustomerController::class, 'updateCustomer'])->name('dashboard.customers.update');
+    Route::delete('/dashboard/customers/{id}',[AdminCustomerController::class, 'deleteCustomer'])->name('dashboard.customers.delete');
 
 });
 Route::middleware(['web','auth','RoleMiddleware:customer'])->group(function () {

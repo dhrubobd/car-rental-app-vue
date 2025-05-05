@@ -37,13 +37,10 @@ class PageController extends Controller
         }
     }
     function manageCustomers(Request $request){
-        /*
-        if($this->isAdmin($request)==true){
-            return view('page.dashboard.customers');
-        }else{
-            return view('page.auth.login-page');
-        }
-        */
+        $customers = User::where('role','customer')->get();
+        return inertia('Backend/Customers/ListCustomer', [
+            'customers' => $customers,
+        ]);
     }
     function customerData(){
         return User::where('role','customer')->orderBy('updated_at', 'desc')->get();

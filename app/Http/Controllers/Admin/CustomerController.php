@@ -9,48 +9,71 @@ use App\Models\user;
 use Exception;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CustomerController extends Controller
 {
 
     function createCustomer(Request $request){
-        if($this->isAdmin($request)==true){
-            //return $request->all();
-            
-            $customerName=$request->input('customerName');
-            $customerEmail = $request->input('customerEmail');
-            $customerPhone = $request->input('customerPhone');
-            $customerAddress = $request->input('customerAddress');
-            $customerPassword = $request->input('customerPassword');
+        return Inertia::render('Backend/Customers/AddCustomer');
+    }
+    function saveCustomer(Request $request){
+        try {
+            $request->validate([
+                'name' => 'required|string||max:100',
+                'email' => 'required|string|email|max:100|unique:users',
+                'password' => 'required|string|min:6',
+            ]);
 
-            try {
-                return User::create([
-                    'name'=>$customerName,
-                    'email'=>$customerEmail,
-                    'phone'=>$customerPhone,
-                    'address'=>$customerAddress,
-                    'password'=>$customerPassword,
-                    'role'=>'customer'
-                ]);
-                } catch (\Throwable $th) {
-                    return  response()->json(['msg' => "Customer is not created", 'data' =>  "Failed"],200);
-                }
-        }else{
-            return view('page.auth.login-page');
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'role' => 'customer',
+                'password' => $request->password,
+            ]);
+
+            return redirect()->route('dashboard.customers')->with('success', 'User created successfully.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
         }
     }
+    function editCustomer(String $id){
+        $customerID=$id;
+        $theCustomer = User::where('id',$customerID)->first();
+        return Inertia::render('Backend/Customers/EditCustomer', [
+            'customer' => $theCustomer,
+        ]);
+    }
+    function updateCustomer(Request $request, String $id){
+        try {
+            $request->validate([
+                'name' => 'required|string|max:100',
+                'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+                'password' => 'nullable|string|min:6',
+            ]);
 
-    function deleteCustomer(Request $request){
-        if($this->isAdmin($request)==true){
-            $customerID = $request->input('id');
-            try {
-                return User::where('id',$customerID)->delete();
-            } catch (\Throwable $th) {
-                return  response()->json(['msg' => "Customer is not Deleted", 'data' =>  "Failed"],200);
+            $user = User::findOrFail($id);
+
+            $data = [
+                'name' => $request->name,
+                'email'=> $request->email
+            ];
+
+            if($request->filled('password')) {
+                $data['password'] = $request->password;
             }
-        }else{
-            return view('page.auth.login-page');
+
+            $user->update($data);
+
+            return redirect()->route('dashboard.customers')->with('success', 'User updated successfully.');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
         }
+    }
+    function deleteCustomer(String $id){
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect()->route('dashboard.customers')->with('success','Customer deleted successfully.');
     }
 
     function customerByID(Request $request){
@@ -62,26 +85,7 @@ class CustomerController extends Controller
         }
         
     }
-    function updateCustomer(Request $request){
-        if($this->isAdmin($request)==true){
-            $customerID=$request->input('id');
-            $customerName = $request->input('name');
-            $customerEmail = $request->input('email');
-            $customerPhone = $request->input('phone');
-            $customerAddress = $request->input('address');
-            $customerPassword = $request->input('password');
-            return User::where('id',$customerID)
-                ->update([
-                    'name'=>$customerName,
-                    'email'=>$customerEmail,
-                    'phone'=>$customerPhone,
-                    'address'=>$customerAddress,
-                    'password'=>$customerPassword,
-                ]);
-        }else{
-            return view('page.auth.login-page');
-        }
-    }
+    
     function customerRentals(Request $request){
         if($this->isAdmin($request)==true){
             $customerID = $request->input('id');
