@@ -10,98 +10,199 @@ use Illuminate\Http\Request;
 
 class RentalController extends Controller
 {
-    function listCustomer(Request $request){
-        if($this->isAdmin($request)==true){
-            return User::where('role','customer')->orderBy('updated_at', 'desc')->get();
-        }else{
+    function listCustomer(Request $request)
+    {
+        if ($this->isAdmin($request) == true) {
+            return User::where('role', 'customer')->orderBy('updated_at', 'desc')->get();
+        } else {
             return view('page.auth.login-page');
         }
     }
 
-    function listAvailableCar(Request $request){
-        if($this->isAdmin($request)==true){
-            return Car::where('availability',true)
+    function listAvailableCar(Request $request)
+    {
+        if ($this->isAdmin($request) == true) {
+            return Car::where('availability', true)
+                ->orderBy('updated_at', 'desc')->get();
+        } else {
+            return view('page.auth.login-page');
+        }
+    }
+
+    function createRental(Request $request)
+    {
+        $customers = User::where('role', 'customer')->orderBy('updated_at', 'desc')->get();
+        $cars = Car::where('availability', true)
             ->orderBy('updated_at', 'desc')->get();
-        }else{
-            return view('page.auth.login-page');
-        }
+        return inertia('Backend/Rentals/AddRental', [
+            'customers' => $customers,
+            'cars' => $cars,
+        ]);
     }
+    function saveRental(Request $request)
+    {
+        $request->validate(
+            [
+                'customer' => 'required',
+                'car' => 'required',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
+                'booking_days' => 'required|numeric',
+            ]
+        );
+        try {
+            $userID = $request->input('customer');
+            $carID = $request->input('car');
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+            $bookingDays = $request->input('booking_days');
+            $count1 = Rental::where('car_id', $carID)
+                ->where('status', '<>', 'cancelled')
+                ->whereBetween('start_date', [$startDate, $endDate])->count();
 
-    function createRental(Request $request){
-        if($this->isAdmin($request)==true){
-            $userID=$request->input('customerID');
-            $carID=$request->input('carID');
-            $startDate = $request->input('fromDate');
-            $endDate = $request->input('toDate');
-            $bookingDays = $request->input('bookingDays');
-            $count1 = Rental::where('car_id',$carID)
-            ->where('status','<>','cancelled')
-            ->whereBetween('start_date',[$startDate, $endDate])->count();
-            
-            $count2 = Rental::where('car_id',$carID)
-            ->where('status','<>','cancelled')
-            ->whereBetween('end_date',[$startDate, $endDate])
-            ->count();
-            if(($count1==0)&&($count2==0)){
-                $theCar = Car::where('id',$carID)->first();
-            
+            $count2 = Rental::where('car_id', $carID)
+                ->where('status', '<>', 'cancelled')
+                ->whereBetween('end_date', [$startDate, $endDate])
+                ->count();
+            if (($count1 == 0) && ($count2 == 0)) {
+                $theCar = Car::where('id', $carID)->first();
+
                 $dailyRent = $theCar->daily_rent_price;
-                
+
                 $totalCost = $bookingDays * $dailyRent;
-               
-            return Rental::create([
-                    'user_id'=>$userID,
-                    'car_id'=>$carID,
-                    'start_date'=>$startDate,
-                    'end_date'=>$endDate,
-                    'status'=>'completed',
-                    'total_cost'=>$totalCost,
+
+                Rental::create([
+                    'user_id' => $userID,
+                    'car_id' => $carID,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'status' => 'ongoing',
+                    'total_cost' => $totalCost,
                 ]);
-            }else{
-                return  response()->json(['msg' => "The Car Can Not be Booked for the date range", 'data' =>  "Failed"],200);
+                return redirect()->route('dashboard.rentals')->with('success', 'Rental Created Successfully');
+            } else {
+                return  redirect()->back()->with('error', 'The Car is already Booked for the date range');
             }
-        }else{
-            return view('page.auth.login-page');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Rental Creation Failed');
         }
     }
 
-    function rentalByID(Request $request){
-        if($this->isAdmin($request)==true){
-            $rentalID=$request->input('id');
-            return Rental::where('id',$rentalID)->first();
-        }else{
+    function rentalByID(Request $request)
+    {
+        if ($this->isAdmin($request) == true) {
+            $rentalID = $request->input('id');
+            return Rental::where('id', $rentalID)->first();
+        } else {
             return view('page.auth.login-page');
         }
     }
-    function deleteRental(Request $request){
-        if($this->isAdmin($request)==true){
-            $rentalID=$request->input('id');
-            return Rental::where('id',$rentalID)->delete();
-        }else{
+    function deleteRental(String $id)
+    {
+        /*
+        if ($this->isAdmin($request) == true) {
+            $rentalID = $request->input('id');
+            return Rental::where('id', $rentalID)->delete();
+        } else {
             return view('page.auth.login-page');
         }
-        
+        */
+        try {
+            Rental::where('id', $id)->delete();
+            return redirect()->route('dashboard.rentals')->with('success', 'Rental Deleted Successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Rental Deletion Failed');
+        }
     }
-    
-    function updateRental(Request $request){
-        if($this->isAdmin($request)==true){
+    function editRental(String $id)
+    {
+        $rental = Rental::where('id', $id)->first();
+        $customers = User::where('role', 'customer')->get();
+        $cars = Car::where('availability', true)->get();
+        return inertia('Backend/Rentals/EditRental', [
+            'rental' => $rental,
+            'customers' => $customers,
+            'cars' => $cars,
+        ]);
+    }
+
+    function updateRental(Request $request, String $id)
+    {
+        /*
+        if ($this->isAdmin($request) == true) {
             $rentalID = $request->input('rentalID');
             $rentalStatus = $request->input('rentalStatus');
-            return Rental::where('id',$rentalID)->update([
-                'status'=>$rentalStatus,
+            return Rental::where('id', $rentalID)->update([
+                'status' => $rentalStatus,
             ]);
-        }else{
+        } else {
             return view('page.auth.login-page');
+        }
+        */
+        $request->validate(
+            [
+                'customer' => 'required',
+                'car' => 'required',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
+                'booking_days' => 'required|numeric',
+                'status' => 'required|in:ongoing,completed,cancelled',
+            ]
+        );
+        try {
+            $rentalID = $id;
+            $userID = $request->input('customer');
+            $carID = $request->input('car');
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+            $bookingDays = $request->input('booking_days');
+            $status = $request->input('status');
+            $totalCost = 0;
+            if ($status == 'ongoing') {
+                $count1 = Rental::where('car_id', $carID)
+                    ->where('status', '<>', 'cancelled')
+                    ->whereBetween('start_date', [$startDate, $endDate])->count();
+                $count2 = Rental::where('car_id', $carID)
+                    ->where('status', '<>', 'cancelled')
+                    ->whereBetween('end_date', [$startDate, $endDate])
+                    ->count();
+                if (($count1 == 0) && ($count2 == 0)) {
+                    $theCar = Car::where('id', $carID)->first();
+
+                    $dailyRent = $theCar->daily_rent_price;
+
+                    $totalCost = $bookingDays * $dailyRent;
+                } else {
+                    return  redirect()->back()->with('error', 'The Car is already Booked for the date range');
+                }
+                Rental::where('id', $rentalID)->update([
+                    'user_id' => $userID,
+                    'car_id' => $carID,
+                    'start_date' => $startDate,
+                    'end_date' => $endDate,
+                    'status' => $status,
+                    'total_cost' => $totalCost,
+                ]);
+                return redirect()->route('dashboard.rentals')->with('success', 'Rental Updated Successfully');
+            } else {
+                Rental::where('id', $rentalID)->update([
+                    'status' => $status,
+                ]);
+                return redirect()->route('dashboard.rentals')->with('success', 'Rental Updated Successfully');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', 'Rental Update Failed');
         }
     }
 
-    function isAdmin(Request $request){
+    function isAdmin(Request $request)
+    {
         $userID = $request->header('id');
-        $theUser= User::where('id','=',$userID)
-             ->select(['role'])->first();
-        if($theUser->role=="admin"){
+        $theUser = User::where('id', '=', $userID)
+            ->select(['role'])->first();
+        if ($theUser->role == "admin") {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

@@ -94,6 +94,18 @@ class PageController extends Controller
             return view('page.auth.login-page');
         }
         */
+        try {
+            $rentals = Rental::join('users','users.id','=','rentals.user_id')->join('cars','cars.id','=','rentals.car_id')
+            ->get(['users.name AS customer_name','cars.name AS car_name','cars.brand AS car_brand', 'rentals.*']);
+            return inertia('Backend/Rentals/ListRental', [
+                'rentals' => $rentals,
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Unsuccessful'
+            ],200);
+        }
     }
 
     function rentalData(){

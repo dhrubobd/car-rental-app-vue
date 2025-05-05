@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\CarController as AdminCarController;
 use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
+use App\Http\Controllers\Admin\RentalController as AdminRentalController;
 use App\Http\Controllers\Frontend\CarController as FrontendCarController;
 use App\Http\Controllers\Frontend\PageController as FrontendPageController;
 
@@ -32,6 +33,13 @@ Route::middleware(['RoleMiddleware:admin'])->group(function () {
     Route::get('/dashboard/customers/{id}/edit',[AdminCustomerController::class, 'editCustomer'])->name('dashboard.customers.edit');
     Route::put('/dashboard/customers/{id}/edit',[AdminCustomerController::class, 'updateCustomer'])->name('dashboard.customers.update');
     Route::delete('/dashboard/customers/{id}',[AdminCustomerController::class, 'deleteCustomer'])->name('dashboard.customers.delete');
+    Route::get('/dashboard/rentals',[AdminPageController::class, 'manageRentals'])->name('dashboard.rentals');
+    //create rental
+    Route::get('/dashboard/rentals/create',[AdminRentalController::class, 'createRental'])->name('dashboard.rentals.create');
+    Route::post('/dashboard/rentals/create',[AdminRentalController::class, 'saveRental'])->name('dashboard.rentals.save');
+    Route::get('/dashboard/rentals/{id}/edit',[AdminRentalController::class, 'editRental'])->name('dashboard.rentals.edit');
+    Route::put('/dashboard/rentals/{id}/edit',[AdminRentalController::class, 'updateRental'])->name('dashboard.rentals.update');
+    Route::delete('/dashboard/rentals/{id}',[AdminRentalController::class, 'deleteRental'])->name('dashboard.rentals.delete');
 
 });
 Route::middleware(['web','auth','RoleMiddleware:customer'])->group(function () {
