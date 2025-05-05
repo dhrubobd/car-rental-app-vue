@@ -54,6 +54,17 @@ class PageController extends Controller
             return view('page.auth.login-page');
         }   
         */
+        try {
+            $cars = Car::all();
+            return inertia('Backend/Cars/ListCar', [
+                'cars' => $cars,
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Unsuccessful'
+            ],200);
+        }
     }
 
     function carData(){

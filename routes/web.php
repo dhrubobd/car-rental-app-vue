@@ -18,7 +18,7 @@ Route::get('/logout',[AuthController::class, 'logout'])->name('page.logout');
 
 Route::middleware(['RoleMiddleware:admin'])->group(function () {
     Route::get('/dashboard',[AdminPageController::class, 'dashboardView'])->name('dashboard');
-    Route::get('/dashboard/cars',[AdminPageController::class, 'carData'])->name('dashboard.cars');
+    Route::get('/dashboard/cars',[AdminPageController::class, 'manageCars'])->name('dashboard.cars');
     Route::get('/dashboard/cars/create',[AdminCarController::class, 'createCar'])->name('dashboard.cars.create');
     Route::post('/dashboard/cars/create',[AdminCarController::class, 'saveCar'])->name('dashboard.cars.save');
     Route::get('/dashboard/cars/{id}/edit',[AdminCarController::class, 'editCar'])->name('dashboard.cars.edit');
