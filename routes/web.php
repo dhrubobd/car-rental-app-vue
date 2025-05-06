@@ -11,7 +11,7 @@ use App\Http\Controllers\Frontend\PageController as FrontendPageController;
 
 Route::get('/', function () {
     return inertia('Home');
-});
+})->name('home');
 
 Route::get('/login',[AuthController::class, 'loginPage'])->name('login');
 Route::post('/login',[AuthController::class, 'login'])->name('post.login');
@@ -43,5 +43,5 @@ Route::middleware(['RoleMiddleware:admin'])->group(function () {
 
 });
 Route::middleware(['web','auth','RoleMiddleware:customer'])->group(function () {
-    Route::get('/customer/manage-booking',[FrontendPageController::class, 'manageBookingView'])->name('page.manage-booking');
+    Route::get('/customer/manage-booking',[FrontendPageController::class, 'manageBookingView'])->name('customer.manage-booking');
 });

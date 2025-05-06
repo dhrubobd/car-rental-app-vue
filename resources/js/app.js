@@ -27,7 +27,7 @@ createInertiaApp({
       .use(plugin)
       .use(Toast, {
         position: 'top-right',
-        timeout: 2000,
+        timeout: 1000,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
