@@ -15,6 +15,8 @@ const props = defineProps({
 const columns = [
     { key: 'name', label: 'Name', searchable: true, sortable: true },
     { key: 'email', label: 'Email', searchable: false, sortable: true },
+    { key: 'phone', label: 'Phone', searchable: false, sortable: true },
+    { key: 'address', label: 'Address', searchable: false, sortable: true },
     { key: 'actions', label: 'Actions', slot: 'actions-slot', searchable: false },
 ];
 

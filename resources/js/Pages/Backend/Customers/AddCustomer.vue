@@ -10,6 +10,8 @@ const flash = computed(() => usePage().props.flash);
 const form = useForm({
     name: '',
     email: '',
+    phone:'',
+    address: '',
     password: '',
 });
 
@@ -38,6 +40,16 @@ const submitForm = () => {
                         <label for="customer-email" class="block text-gray-700 font-bold mb-2">Email</label>
                         <input type="email" id="customer-email" class="w-full p-2 border rounded-md"
                             placeholder="Enter email" v-model="form.email" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="customer-phone" class="block text-gray-700 font-bold mb-2">Phone Number</label>
+                        <input type="text" id="customer-phone" class="w-full p-2 border rounded-md"
+                            placeholder="Enter phone number" v-model="form.phone">
+                    </div>
+                    <div class="mb-4">
+                        <label for="customer-address" class="block text-gray-700 font-bold mb-2">Address</label>
+                        <textarea id="customer-address" class="w-full p-2 border rounded-md"
+                            placeholder="Enter address" v-model="form.address"></textarea>
                     </div>
                     <div class="mb-4">
                         <label for="customer-password" class="block text-gray-700 font-bold mb-2">Password</label>

@@ -28,6 +28,8 @@ class CustomerController extends Controller
             User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
                 'role' => 'customer',
                 'password' => $request->password,
             ]);
@@ -56,7 +58,9 @@ class CustomerController extends Controller
 
             $data = [
                 'name' => $request->name,
-                'email'=> $request->email
+                'email'=> $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
             ];
 
             if($request->filled('password')) {
