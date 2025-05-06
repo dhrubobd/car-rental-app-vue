@@ -10,12 +10,27 @@ use App\Models\user;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class PageController extends Controller
 {
 
     function dashboardView(Request $request){ 
-        return inertia('Backend/Dashboard');   
+        try {
+            $totalCars = Car::all()->count();
+            $totalRentals = Rental::where('status','completed')->count();
+            $totalEarnings = Rental::where('status','completed')->sum('total_cost');
+            return Inertia::render('Backend/Dashboard', [
+                'totalCars' => $totalCars,
+                'totalRentals' => $totalRentals,
+                'totalEarnings' => $totalEarnings
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Unsuccessful'
+            ],200);
+        }
     }
     function dashboardData(){
         try {
@@ -40,6 +55,17 @@ class PageController extends Controller
         $customers = User::where('role','customer')->get();
         return inertia('Backend/Customers/ListCustomer', [
             'customers' => $customers,
+        ]);
+    }
+    function customerDetails(String $id){
+        $customerID=$id;
+        $theCustomer = User::where('id',$customerID)->first();
+        $rentedCars = Rental::join('cars','cars.id','=','rentals.car_id')
+        ->where('rentals.user_id',$customerID)
+        ->get(['cars.name AS car_name', 'cars.brand AS car_brand', 'rentals.*']);
+        return Inertia::render('Backend/Customers/CustomerDetails', [
+            'customer' => $theCustomer,
+            'rentals' => $rentedCars,
         ]);
     }
     function customerData(){

@@ -49,6 +49,10 @@ const deleteCustomer = (id) => {
                 <TableComponent :data="customers" :columns="columns" :page-size="5">
                     <template #actions-slot="{ row }">
                         <div class="space-x-2">
+                            <Link :href="`/dashboard/customers/${row.id}/details`"
+                                class="bg-green-500 text-white px-2 py-1 rounded-md">
+                            Rental Details
+                            </Link>
                             <Link :href="`/dashboard/customers/${row.id}/edit`"
                                 class="bg-yellow-500 text-white px-2 py-1 rounded-md">
                             Edit

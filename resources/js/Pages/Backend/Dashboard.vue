@@ -1,9 +1,10 @@
 <script setup>
-    import Mainlayout from './Layouts/Main.vue';
+    import { onMounted } from 'vue';
+import Mainlayout from './Layouts/Main.vue';
     const props = defineProps({
         totalCars: Number,
-        totalRevenue: Number,
         totalRentals: Number,
+        totalEarnings: Number,
     });
 </script>
 <template>
@@ -13,15 +14,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white shadow-md p-4 rounded-lg">
                 <h3 class="text-lg font-semibold">Total Cars</h3>
-                <p class="text-3xl text-blue-500">{{ totalCars }}</p>
+                <p class="text-3xl text-blue-500">{{ props.totalCars }}</p>
                 </div>
                 <div class="bg-white shadow-md p-4 rounded-lg">
                 <h3 class="text-lg font-semibold">Total Rentals</h3>
-                <p class="text-3xl text-green-500">{{ totalRentals }}</p>
+                <p class="text-3xl text-green-500">{{ props.totalRentals }}</p>
                 </div>
                 <div class="bg-white shadow-md p-4 rounded-lg">
-                <h3 class="text-lg font-semibold">Total Revenue</h3>
-                <p class="text-3xl text-red-500">${{ totalRevenue }}</p>
+                <h3 class="text-lg font-semibold">Total Earnings</h3>
+                <p class="text-3xl text-red-500">${{ props.totalEarnings }}</p>
                 </div>
             </div>
         </main>

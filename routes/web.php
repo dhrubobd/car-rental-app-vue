@@ -25,16 +25,16 @@ Route::middleware(['RoleMiddleware:admin'])->group(function () {
     Route::get('/dashboard/cars/{id}/edit',[AdminCarController::class, 'editCar'])->name('dashboard.cars.edit');
     Route::put('/dashboard/cars/{id}/edit',[AdminCarController::class, 'updateCar'])->name('dashboard.cars.update');
     Route::delete('/dashboard/cars/{id}',[AdminCarController::class, 'deleteCar'])->name('dashboard.cars.delete');
+
     Route::get('/dashboard/customers',[AdminPageController::class, 'manageCustomers'])->name('dashboard.customers');
-    // Add Customer
+    Route::get('/dashboard/customers/{id}/details',[AdminPageController::class, 'customerDetails'])->name('dashboard.customer.details');
     Route::get('/dashboard/customers/create',[AdminCustomerController::class, 'createCustomer'])->name('dashboard.customers.create');
     Route::post('/dashboard/customers/create',[AdminCustomerController::class, 'saveCustomer'])->name('dashboard.customers.save');
-    // Update Customer
     Route::get('/dashboard/customers/{id}/edit',[AdminCustomerController::class, 'editCustomer'])->name('dashboard.customers.edit');
     Route::put('/dashboard/customers/{id}/edit',[AdminCustomerController::class, 'updateCustomer'])->name('dashboard.customers.update');
     Route::delete('/dashboard/customers/{id}',[AdminCustomerController::class, 'deleteCustomer'])->name('dashboard.customers.delete');
+
     Route::get('/dashboard/rentals',[AdminPageController::class, 'manageRentals'])->name('dashboard.rentals');
-    //create rental
     Route::get('/dashboard/rentals/create',[AdminRentalController::class, 'createRental'])->name('dashboard.rentals.create');
     Route::post('/dashboard/rentals/create',[AdminRentalController::class, 'saveRental'])->name('dashboard.rentals.save');
     Route::get('/dashboard/rentals/{id}/edit',[AdminRentalController::class, 'editRental'])->name('dashboard.rentals.edit');
