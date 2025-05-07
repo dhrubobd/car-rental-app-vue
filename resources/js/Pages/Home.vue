@@ -1,10 +1,10 @@
 <script setup>
 import { defineProps } from 'vue';
 import Layout from '@/Pages/Frontend/Layouts/Main.vue';
+import CarCard from '../Components/CarCard.vue';
 
 const props = defineProps({
-  sliders: Array,
-  products: Array,
+  cars: Array,
 })
 
 </script>
@@ -40,29 +40,8 @@ const props = defineProps({
     <section>
       <div class="container mx-auto px-4 py-8">
         <h2 class="text-4xl mb-6">Featured Cars</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src="https://dummyimage.com/300x200/ffcc00/fff&text=Car+1" alt="Car"
-              class="w-full h-48 object-cover" />
-            <div class="p-4">
-              <h3 class="text-2xl font-semibold">Car Name</h3>
-              <p class="text-gray-600">
-                <strong>Brand:</strong> Toyota<br>
-                <strong>Model:</strong> 2023 Model<br>
-                <strong>Type:</strong> SUV
-              </p>
-              <div class="flex items-center mt-2 mb-2">
-                <h4 class="text-orange-500 font-bold">Per Day: $29.99</h4>
-              </div>
-              <Link href="#booking"
-                class="inline-block bg-blue-400 text-white px-6 py-2 rounded-md text-lg font-medium hover:bg-blue-500 transition cursor-pointer">
-              Book Car
-              </Link>
-            </div>
-          </div>
-
-          
-
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <CarCard v-for="(car,index) in cars" :key="index" :car="car" />
         </div>
       </div>
     </section>

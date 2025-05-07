@@ -81,7 +81,8 @@ class PageController extends Controller
         }   
         */
         try {
-            $cars = Car::all();
+            $cars = Car::query()
+            ->orderBy('updated_at', 'desc')->get();
             return inertia('Backend/Cars/ListCar', [
                 'cars' => $cars,
             ]);

@@ -27,6 +27,7 @@ const columns = [
     { key: 'end_date', label: 'End Date', searchable: false, sortable: true },
     { key: 'total_cost', label: 'Total Cost', searchable: false, sortable: true },
     { key: 'status', label: 'Status', searchable: false, sortable: true },
+    { key: 'actions', label: 'Actions', slot: 'actions-slot', searchable: false },
 ];
 
 onMounted(() => {
