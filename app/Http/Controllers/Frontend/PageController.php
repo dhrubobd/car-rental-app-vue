@@ -15,6 +15,13 @@ class PageController extends Controller
             'cars'=>$cars,
         ]);
     }
+
+    function carDetailsView(String $id){
+        $car = Car::where('id',$id)->first();
+        return Inertia::render('Frontend/CarDetails',[
+            'car'=>$car,
+        ]);
+    }
     function customerCarsView(){
         return view('page.customer.cars');
     }

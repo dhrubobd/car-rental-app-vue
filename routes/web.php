@@ -8,8 +8,11 @@ use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Http\Controllers\Admin\RentalController as AdminRentalController;
 use App\Http\Controllers\Frontend\CarController as FrontendCarController;
 use App\Http\Controllers\Frontend\PageController as FrontendPageController;
+use App\Http\Controllers\Frontend\RentalController as FrontendRentalController;
 
 Route::get('/',[FrontendPageController::class, 'homePageView'])->name('home');
+Route::get('/cars',[FrontendPageController::class, 'carPageView'])->name('cars');
+Route::get('/cars/{id}/details',[FrontendPageController::class, 'carDetailsView'])->name('cars.details');
 Route::get('/register',[AuthController::class, 'registerPage'])->name('registration');
 Route::post('/register',[AuthController::class, 'register'])->name('post.registration');
 Route::get('/login',[AuthController::class, 'loginPage'])->name('login');
@@ -42,5 +45,7 @@ Route::middleware(['RoleMiddleware:admin'])->group(function () {
 
 });
 Route::middleware(['web','auth','RoleMiddleware:customer'])->group(function () {
+
     Route::get('/customer/manage-booking',[FrontendPageController::class, 'manageBookingView'])->name('customer.manage-booking');
+    Route::post('/rentals/create',[FrontendRentalController::class, 'bookCar'])->name('booking.create');
 });
