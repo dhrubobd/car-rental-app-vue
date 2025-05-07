@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Mail\CarRentalMail;
-use App\Models\car;
-use App\Models\rental;
-use App\Models\user;
+use App\Models\Car;
+use App\Models\Rental;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -53,6 +53,11 @@ class RentalController extends Controller
                     'status' => 'ongoing',
                     'total_cost' => $totalCost,
                 ]);
+                $customerEmail = $user->email;
+                $customerName = $user->name;
+                $car = Car::where('id',$carID)->first();
+                $carName = $car->name;
+                Mail::to($customerEmail)->send(new CarRentalMail($customerName, $carName, $startDate, $endDate,$totalCost));
                 return redirect()->route('customer.manage-booking')->with('success', 'Car is Booked Successfully');
             } else {
                 return  redirect()->back()->with('error', 'The Car is already Booked for the date range');
