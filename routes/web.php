@@ -12,7 +12,8 @@ use App\Http\Controllers\Frontend\PageController as FrontendPageController;
 Route::get('/', function () {
     return inertia('Home');
 })->name('home');
-
+Route::get('/register',[AuthController::class, 'registerPage'])->name('registration');
+Route::post('/register',[AuthController::class, 'register'])->name('post.registration');
 Route::get('/login',[AuthController::class, 'loginPage'])->name('login');
 Route::post('/login',[AuthController::class, 'login'])->name('post.login');
 Route::get('/logout',[AuthController::class, 'logout'])->name('page.logout');

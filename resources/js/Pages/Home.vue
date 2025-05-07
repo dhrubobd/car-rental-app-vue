@@ -18,15 +18,15 @@ const props = defineProps({
         <!-- Text Content -->
         <div class="w-full lg:w-1/2 mt-10 lg:mt-0">
           <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-6">
-            Rent Your Dream Car Today
+            Rent Your <span class="text-orange-500">Dream Car</span> Today
           </h1>
           <p class="text-lg text-gray-600 mb-6">
             Choose from a wide range of vehicles at unbeatable prices. Reliable, convenient, and always on time.
           </p>
-          <a href="#booking"
-            class="inline-block bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-700 transition">
-            Browse Cars
-          </a>
+          <Link href="#booking"
+            class="inline-block bg-blue-400 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-500 transition cursor-pointer">
+          Browse Cars
+          </Link>
         </div>
 
         <!-- Image -->
@@ -39,120 +39,30 @@ const props = defineProps({
     </section>
     <section>
       <div class="container mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">Featured Cars</h2>
+        <h2 class="text-4xl mb-6">Featured Cars</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <img src="https://dummyimage.com/300x200/ffcc00/fff&text=Car+1" alt="Car"
               class="w-full h-48 object-cover" />
             <div class="p-4">
-              <h3 class="text-lg font-semibold">Car Name</h3>
-              <p class="text-gray-600">Description goes here...</p>
-              <div class="flex items-center mt-2">
-                <span class="text-red-500 font-bold">$29.99</span>
-                <span class="text-gray-400 line-through ml-2">$39.99</span>
+              <h3 class="text-2xl font-semibold">Car Name</h3>
+              <p class="text-gray-600">
+                <strong>Brand:</strong> Toyota<br>
+                <strong>Model:</strong> 2023 Model<br>
+                <strong>Type:</strong> SUV
+              </p>
+              <div class="flex items-center mt-2 mb-2">
+                <h4 class="text-orange-500 font-bold">Per Day: $29.99</h4>
               </div>
-              <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">New Arrival</span>
+              <Link href="#booking"
+                class="inline-block bg-blue-400 text-white px-6 py-2 rounded-md text-lg font-medium hover:bg-blue-500 transition cursor-pointer">
+              Book Car
+              </Link>
             </div>
           </div>
 
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src="https://dummyimage.com/300x200/00ccff/fff&text=Car+2" alt="Car"
-              class="w-full h-48 object-cover" />
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Car Name</h3>
-              <p class="text-gray-600">Description goes here...</p>
-              <div class="flex items-center mt-2">
-                <span class="text-red-500 font-bold">$19.99</span>
-                <span class="text-gray-400 line-through ml-2">$29.99</span>
-              </div>
-              <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">Popular</span>
-            </div>
-          </div>
           
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src="https://dummyimage.com/300x200/00ccff/fff&text=Car+2" alt="Car"
-              class="w-full h-48 object-cover" />
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Car Name</h3>
-              <p class="text-gray-600">Description goes here...</p>
-              <div class="flex items-center mt-2">
-                <span class="text-red-500 font-bold">$19.99</span>
-                <span class="text-gray-400 line-through ml-2">$29.99</span>
-              </div>
-              <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">Popular</span>
-            </div>
-          </div>
 
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src="https://dummyimage.com/300x200/00ccff/fff&text=Car+2" alt="Car"
-              class="w-full h-48 object-cover" />
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Car Name</h3>
-              <p class="text-gray-600">Description goes here...</p>
-              <div class="flex items-center mt-2">
-                <span class="text-red-500 font-bold">$19.99</span>
-                <span class="text-gray-400 line-through ml-2">$29.99</span>
-              </div>
-              <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">Popular</span>
-            </div>
-          </div>
-
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src="https://dummyimage.com/300x200/00ccff/fff&text=Car+2" alt="Car"
-              class="w-full h-48 object-cover" />
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Car Name</h3>
-              <p class="text-gray-600">Description goes here...</p>
-              <div class="flex items-center mt-2">
-                <span class="text-red-500 font-bold">$19.99</span>
-                <span class="text-gray-400 line-through ml-2">$29.99</span>
-              </div>
-              <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">Popular</span>
-            </div>
-          </div>
-
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src="https://dummyimage.com/300x200/ffcc00/fff&text=Car+1" alt="Car"
-              class="w-full h-48 object-cover" />
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Car Name</h3>
-              <p class="text-gray-600">Description goes here...</p>
-              <div class="flex items-center mt-2">
-                <span class="text-red-500 font-bold">$29.99</span>
-                <span class="text-gray-400 line-through ml-2">$39.99</span>
-              </div>
-              <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">New Arrival</span>
-            </div>
-          </div>
-
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src="https://dummyimage.com/300x200/00ccff/fff&text=Car+2" alt="Car"
-              class="w-full h-48 object-cover" />
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Car Name</h3>
-              <p class="text-gray-600">Description goes here...</p>
-              <div class="flex items-center mt-2">
-                <span class="text-red-500 font-bold">$19.99</span>
-                <span class="text-gray-400 line-through ml-2">$29.99</span>
-              </div>
-              <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">Popular</span>
-            </div>
-          </div>
-          
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <img src="https://dummyimage.com/300x200/00ccff/fff&text=Car+2" alt="Car"
-              class="w-full h-48 object-cover" />
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">Car Name</h3>
-              <p class="text-gray-600">Description goes here...</p>
-              <div class="flex items-center mt-2">
-                <span class="text-red-500 font-bold">$19.99</span>
-                <span class="text-gray-400 line-through ml-2">$29.99</span>
-              </div>
-              <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs mt-2 inline-block">Popular</span>
-            </div>
-          </div>
-          
         </div>
       </div>
     </section>
