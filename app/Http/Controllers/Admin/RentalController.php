@@ -108,14 +108,6 @@ class RentalController extends Controller
     }
     function deleteRental(String $id)
     {
-        /*
-        if ($this->isAdmin($request) == true) {
-            $rentalID = $request->input('id');
-            return Rental::where('id', $rentalID)->delete();
-        } else {
-            return view('page.auth.login-page');
-        }
-        */
         try {
             Rental::where('id', $id)->delete();
             return redirect()->route('dashboard.rentals')->with('success', 'Rental Deleted Successfully');
@@ -137,17 +129,6 @@ class RentalController extends Controller
 
     function updateRental(Request $request, String $id)
     {
-        /*
-        if ($this->isAdmin($request) == true) {
-            $rentalID = $request->input('rentalID');
-            $rentalStatus = $request->input('rentalStatus');
-            return Rental::where('id', $rentalID)->update([
-                'status' => $rentalStatus,
-            ]);
-        } else {
-            return view('page.auth.login-page');
-        }
-        */
         $request->validate(
             [
                 'customer' => 'required',

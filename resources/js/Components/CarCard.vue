@@ -1,5 +1,5 @@
 <script setup>
-import { Link, router } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { useToast } from 'vue-toastification';
 
 const toast = useToast();
@@ -25,10 +25,17 @@ const props = defineProps({
             <div class="flex items-center mt-2 mb-2">
                 <h4 class="text-orange-500 font-bold">Per Day: {{ car.daily_rent_price }}</h4>
             </div>
-            <Link :href="`/cars/${car.id}/details`"
-                class="inline-block bg-blue-400 text-white px-6 py-2 rounded-md text-lg font-medium hover:bg-blue-500 transition cursor-pointer">
-            Book Car
-            </Link>
+            <div class="mt-4 text-red-800" v-if="usePage().props.auth.user == null">
+                Please Login to Book this Car
+
+            </div>
+            <div v-else>
+                <Link :href="`/cars/${car.id}/details`"
+                    class="inline-block bg-blue-400 text-white px-6 py-2 rounded-md text-lg font-medium hover:bg-blue-500 transition cursor-pointer">
+                Book Car
+                </Link>
+            </div>
+
         </div>
     </div>
 </template>
