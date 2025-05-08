@@ -3,7 +3,7 @@
 </script>
 <template>
     <div>
-        <h1>Welcome to Manage Booking Page</h1>
+        <h1>Welcome to Customer Dashboard Page</h1>
     </div>
 </template>
 

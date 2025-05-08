@@ -60,7 +60,7 @@ class AuthController extends Controller
         $user = Auth::user();
         
         if ($user->role !== 'admin') {
-            return  redirect()->route('home')->with('success','Login successful');
+            return  redirect()->route('customer.dashboard')->with('success','Login successful');
 
         }else{
             return  redirect()->route('dashboard')->with('success','Login successful');

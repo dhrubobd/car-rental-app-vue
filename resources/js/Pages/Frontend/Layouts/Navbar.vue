@@ -40,7 +40,7 @@ const userDropDown = ref(false)
             class="z-10 absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
             <ul class="py-2">
               <li>
-                <Link href="/customer/manage-booking" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</Link>
+                <Link href="/customer/dashboard" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</Link>
               </li>
               <li>
                 <Link href="/logout" class="block px-4 py-2 text-red-500 hover:bg-gray-100">Logout</Link>
