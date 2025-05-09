@@ -20,7 +20,10 @@ class PageController extends Controller
     function dashboardView(){
         $user = Auth::user();
         $userID = $user->id;
-        $rentals = Rental::where('user_id',$userID);
-        return inertia('Frontend/Dashboard');
+        $rentals = Rental::join('cars','cars.id','=', 'rentals.car_id')->where('rentals.user_id',$userID)
+            ->get(['cars.name AS car_name','cars.brand AS car_brand', 'rentals.*']);
+        return inertia('Frontend/Dashboard', [
+                'rentals' => $rentals,
+            ]);
     }
 }

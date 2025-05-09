@@ -48,4 +48,5 @@ Route::middleware(['web', 'auth', 'RoleMiddleware:customer'])->group(function ()
 
     Route::get('/customer/dashboard', [FrontendPageController::class, 'dashboardView'])->name('customer.dashboard');
     Route::post('/rentals/create', [FrontendRentalController::class, 'bookCar'])->name('booking.create');
+    Route::post('/rentals/{id}/cancel',[FrontendRentalController::class, 'cancelRental'])->name('booking.cancel');
 });

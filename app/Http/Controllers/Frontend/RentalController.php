@@ -58,7 +58,7 @@ class RentalController extends Controller
                 $car = Car::where('id',$carID)->first();
                 $carName = $car->name;
                 Mail::to($customerEmail)->send(new CarRentalMail($customerName, $carName, $startDate, $endDate,$totalCost));
-                return redirect()->route('customer.manage-booking')->with('success', 'Car is Booked Successfully');
+                return redirect()->route('customer.dashboard')->with('success', 'Car is Booked Successfully');
             } else {
                 return  redirect()->back()->with('error', 'The Car is already Booked for the date range');
             }
@@ -73,14 +73,20 @@ class RentalController extends Controller
         return Rental::where('user_id', $userID)->get();
     }
 
-    function cancelBooking(Request $request)
+    function cancelRental(String $id)
     {
-        $userID = $request->header('id');
-        $bookingID = $request->input('bookingID');
+        try {
+            $user = Auth::user();
+        $userID = $user->id;
+        $rentalID = $id;
 
-        return Rental::where('id', $bookingID)->where('user_id', $userID)
+        Rental::where('id', $rentalID)->where('user_id', $userID)
             ->update([
                 'status' => 'cancelled'
             ]);
+        return redirect()->back()->with('success','Booking Cancelled Successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error','Booking Can not be Cancelled');
+        }
     }
 }
