@@ -9,10 +9,17 @@ use App\Http\Controllers\Admin\RentalController as AdminRentalController;
 use App\Http\Controllers\Frontend\CarController as FrontendCarController;
 use App\Http\Controllers\Frontend\PageController as FrontendPageController;
 use App\Http\Controllers\Frontend\RentalController as FrontendRentalController;
+use Inertia\Inertia;
 
 Route::get('/', [FrontendPageController::class, 'homePageView'])->name('home');
 Route::get('/cars', [FrontendCarController::class, 'carPageView'])->name('cars');
 Route::get('/cars/{id}/details', [FrontendCarController::class, 'carDetailsView'])->name('cars.details');
+Route::get('/contact', function(){
+    return Inertia::render('Frontend/Contact');
+});
+Route::get('/about', function(){
+    return Inertia::render('Frontend/About');
+});
 
 Route::get('/register', [AuthController::class, 'registerPage'])->name('registration');
 Route::post('/register', [AuthController::class, 'register'])->name('post.registration');
