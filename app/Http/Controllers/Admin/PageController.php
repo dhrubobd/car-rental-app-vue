@@ -18,10 +18,12 @@ class PageController extends Controller
     {
         try {
             $totalCars = Car::all()->count();
+            $availableCars = Car::where('availability',1)->count();
             $totalRentals = Rental::where('status', 'completed')->count();
             $totalEarnings = Rental::where('status', 'completed')->sum('total_cost');
             return Inertia::render('Backend/Dashboard', [
                 'totalCars' => $totalCars,
+                'availableCars'=>$availableCars,
                 'totalRentals' => $totalRentals,
                 'totalEarnings' => $totalEarnings
             ]);
