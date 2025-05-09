@@ -79,34 +79,4 @@ class CustomerController extends Controller
         $user->delete();
         return redirect()->route('dashboard.customers')->with('success','Customer deleted successfully.');
     }
-
-    function customerByID(Request $request){
-        if($this->isAdmin($request)==true){
-            $customerID=$request->input('id');
-            return User::where('id',$customerID)->first();
-        }else{
-            return view('page.auth.login-page');
-        }
-        
-    }
-    
-    function customerRentals(Request $request){
-        if($this->isAdmin($request)==true){
-            $customerID = $request->input('id');
-            return Rental::where('user_id',$customerID)->get();
-        }else{
-            return view('page.auth.login-page');
-        }
-    }
-
-    function isAdmin(Request $request){
-        $userID = $request->header('id');
-        $theUser= User::where('id','=',$userID)
-             ->select(['role'])->first();
-        if($theUser->role=="admin"){
-            return true;
-        }else{
-            return false;
-        }
-    }
 }

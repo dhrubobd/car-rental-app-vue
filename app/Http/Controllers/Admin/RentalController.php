@@ -13,25 +13,6 @@ use Illuminate\Support\Facades\Mail;
 
 class RentalController extends Controller
 {
-    function listCustomer(Request $request)
-    {
-        if ($this->isAdmin($request) == true) {
-            return User::where('role', 'customer')->orderBy('updated_at', 'desc')->get();
-        } else {
-            return view('page.auth.login-page');
-        }
-    }
-
-    function listAvailableCar(Request $request)
-    {
-        if ($this->isAdmin($request) == true) {
-            return Car::where('availability', true)
-                ->orderBy('updated_at', 'desc')->get();
-        } else {
-            return view('page.auth.login-page');
-        }
-    }
-
     function createRental(Request $request)
     {
         $customers = User::where('role', 'customer')->orderBy('updated_at', 'desc')->get();
@@ -82,28 +63,18 @@ class RentalController extends Controller
                     'status' => 'ongoing',
                     'total_cost' => $totalCost,
                 ]);
-                $user = User::where('id',$userID)->first();
+                $user = User::where('id', $userID)->first();
                 $customerEmail = $user->email;
                 $customerName = $user->name;
-                $car = Car::where('id',$carID)->first();
+                $car = Car::where('id', $carID)->first();
                 $carName = $car->name;
-                Mail::to($customerEmail)->send(new CarRentalMail($customerName, $carName, $startDate, $endDate,$totalCost));
+                Mail::to($customerEmail)->send(new CarRentalMail($customerName, $carName, $startDate, $endDate, $totalCost));
                 return redirect()->route('dashboard.rentals')->with('success', 'Rental Created Successfully');
             } else {
                 return  redirect()->back()->with('error', 'The Car is already Booked for the date range');
             }
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Rental Creation Failed');
-        }
-    }
-
-    function rentalByID(Request $request)
-    {
-        if ($this->isAdmin($request) == true) {
-            $rentalID = $request->input('id');
-            return Rental::where('id', $rentalID)->first();
-        } else {
-            return view('page.auth.login-page');
         }
     }
     function deleteRental(String $id)
@@ -182,18 +153,6 @@ class RentalController extends Controller
             }
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', 'Rental Update Failed');
-        }
-    }
-
-    function isAdmin(Request $request)
-    {
-        $userID = $request->header('id');
-        $theUser = User::where('id', '=', $userID)
-            ->select(['role'])->first();
-        if ($theUser->role == "admin") {
-            return true;
-        } else {
-            return false;
         }
     }
 }

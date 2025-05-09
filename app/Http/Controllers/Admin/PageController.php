@@ -14,12 +14,12 @@ use Inertia\Inertia;
 
 class PageController extends Controller
 {
-
-    function dashboardView(Request $request){ 
+    function dashboardView(Request $request)
+    {
         try {
             $totalCars = Car::all()->count();
-            $totalRentals = Rental::where('status','completed')->count();
-            $totalEarnings = Rental::where('status','completed')->sum('total_cost');
+            $totalRentals = Rental::where('status', 'completed')->count();
+            $totalEarnings = Rental::where('status', 'completed')->sum('total_cost');
             return Inertia::render('Backend/Dashboard', [
                 'totalCars' => $totalCars,
                 'totalRentals' => $totalRentals,
@@ -29,60 +29,35 @@ class PageController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Unsuccessful'
-            ],200);
+            ], 200);
         }
     }
-    function dashboardData(){
-        try {
-            $totalCars = Car::all()->count();
-            $availableCars = Car::where('availability',true)->count();
-            $totalRentals = Rental::where('status','completed')->count();
-            $totalEarnings = Rental::where('status','completed')->sum('total_cost');
-            return response()->json([
-                'totalCars' => $totalCars,
-                'availableCars' => $availableCars,
-                'totalRentals' => $totalRentals,
-                'totalEarnings' => $totalEarnings
-            ],200);
-        }catch (Exception $e) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Unsuccessful'
-            ],200);
-        }
-    }
-    function manageCustomers(Request $request){
-        $customers = User::where('role','customer')->get();
+    function manageCustomers(Request $request)
+    {
+        $customers = User::where('role', 'customer')->orderBy('updated_at', 'desc')->get();
         return inertia('Backend/Customers/ListCustomer', [
             'customers' => $customers,
         ]);
     }
-    function customerDetails(String $id){
-        $customerID=$id;
-        $theCustomer = User::where('id',$customerID)->first();
-        $rentedCars = Rental::join('cars','cars.id','=','rentals.car_id')
-        ->where('rentals.user_id',$customerID)
-        ->get(['cars.name AS car_name', 'cars.brand AS car_brand', 'rentals.*']);
+    function customerDetails(String $id)
+    {
+        $customerID = $id;
+        $theCustomer = User::where('id', $customerID)->first();
+        $rentedCars = Rental::join('cars', 'cars.id', '=', 'rentals.car_id')
+            ->where('rentals.user_id', $customerID)
+            ->orderBy('updated_at', 'desc')
+            ->get(['cars.name AS car_name', 'cars.brand AS car_brand', 'rentals.*']);
         return Inertia::render('Backend/Customers/CustomerDetails', [
             'customer' => $theCustomer,
             'rentals' => $rentedCars,
         ]);
     }
-    function customerData(){
-        return User::where('role','customer')->orderBy('updated_at', 'desc')->get();
-    }
 
-    function manageCars(Request $request){
-        /*
-        if($this->isAdmin($request)==true){
-            return view('page.dashboard.cars');
-        }else{
-            return view('page.auth.login-page');
-        }   
-        */
+    function manageCars(Request $request)
+    {
         try {
             $cars = Car::query()
-            ->orderBy('updated_at', 'desc')->get();
+                ->orderBy('updated_at', 'desc')->get();
             return inertia('Backend/Cars/ListCar', [
                 'cars' => $cars,
             ]);
@@ -90,40 +65,15 @@ class PageController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Unsuccessful'
-            ],200);
+            ], 200);
         }
     }
 
-    function carData(){
+    function manageRentals(Request $request)
+    {
         try {
-            /*
-            return Car::query()
-            ->orderBy('updated_at', 'desc')->get();
-            */
-            $cars = Car::all();
-            return inertia('Backend/Cars/ListCar', [
-                'cars' => $cars,
-            ]);
-
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Unsuccessful'
-            ],200);
-        }
-        
-    }
-    function manageRentals(Request $request){
-        /*
-        if($this->isAdmin($request)==true){
-            return view('page.dashboard.rentals');
-        }else{
-            return view('page.auth.login-page');
-        }
-        */
-        try {
-            $rentals = Rental::join('users','users.id','=','rentals.user_id')->join('cars','cars.id','=','rentals.car_id')
-            ->get(['users.name AS customer_name','cars.name AS car_name','cars.brand AS car_brand', 'rentals.*']);
+            $rentals = Rental::join('users', 'users.id', '=', 'rentals.user_id')->join('cars', 'cars.id', '=', 'rentals.car_id')
+                ->get(['users.name AS customer_name', 'cars.name AS car_name', 'cars.brand AS car_brand', 'rentals.*']);
             return inertia('Backend/Rentals/ListRental', [
                 'rentals' => $rentals,
             ]);
@@ -131,20 +81,7 @@ class PageController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'message' => 'Unsuccessful'
-            ],200);
-        }
-    }
-
-    function rentalData(){
-        try {
-            //return Rental::query()->orderBy('updated_at', 'desc')->get();
-            return Rental::join('users','users.id','=','rentals.user_id')->join('cars','cars.id','=','rentals.car_id')
-            ->get(['users.name AS customer_name','cars.name AS car_name','cars.brand AS car_brand', 'rentals.*']);
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Unsuccessful'
-            ],200);
+            ], 200);
         }
     }
 }

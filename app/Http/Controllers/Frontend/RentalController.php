@@ -66,12 +66,6 @@ class RentalController extends Controller
             return redirect()->back()->with('error', 'Rental Creation Failed');
         }
     }
-    function bookingList(Request $request)
-    {
-        $userID = $request->header('id');
-
-        return Rental::where('user_id', $userID)->get();
-    }
 
     function cancelRental(String $id)
     {
