@@ -27,7 +27,7 @@ import Mainlayout from './Layouts/Main.vue';
                 </div>
                 <div class="bg-white shadow-md p-4 rounded-lg">
                 <h3 class="text-lg font-semibold">Total Earnings</h3>
-                <p class="text-3xl text-red-500">${{ props.totalEarnings }}</p>
+                <p class="text-3xl text-red-500">Tk. {{ props.totalEarnings }}</p>
                 </div>
             </div>
         </main>
