@@ -23,7 +23,7 @@ const props = defineProps({
                 <strong>Type:</strong> {{ car.car_type }}
             </p>
             <div class="flex items-center mt-2 mb-2">
-                <h4 class="text-orange-500 font-bold">Per Day: {{ car.daily_rent_price }}</h4>
+                <h4 class="font-bold">Per Day:  <span class="text-orange-500 ">Tk. {{ car.daily_rent_price }}</span> </h4>
             </div>
             <div class="mt-4 text-red-800" v-if="usePage().props.auth.user == null">
                 Please Login to Book this Car

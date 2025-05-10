@@ -20,7 +20,7 @@ const columns = [
     { key: 'year', label: 'Reg Year', searchable: true, sortable: true },
     { key: 'car_type', label: 'Car Type', searchable: true, sortable: true },
     { key: 'daily_rent_price', label: 'Price', searchable: true, sortable: true },
-    { key: 'availability', label: 'Status', searchable: false, sortable: true },
+    { key: 'availability', label: 'Status', slot: 'status-slot', searchable: false, sortable: true },
     { key: 'actions', label: 'Actions', slot: 'actions-slot', searchable: false },
 ];
 
@@ -57,6 +57,14 @@ const deleteCar = (id) => {
                         <div v-else>
                             <img src="https://dummyimage.com/80x80/000/fff&text=Car" alt="Car Image"
                                 class="w-10 h-10 rounded-full">
+                        </div>
+                    </template>
+                    <template #status-slot="{ row }">
+                        <div v-if="row.availability == 1">
+                            Available
+                        </div>
+                        <div v-else>
+                            Not Available
                         </div>
                     </template>
                     <template #actions-slot="{ row }">

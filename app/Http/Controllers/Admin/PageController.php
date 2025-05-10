@@ -18,12 +18,12 @@ class PageController extends Controller
     {
         try {
             $totalCars = Car::all()->count();
-            $availableCars = Car::where('availability',1)->count();
+            $availableCars = Car::where('availability', 1)->count();
             $totalRentals = Rental::where('status', 'completed')->count();
             $totalEarnings = Rental::where('status', 'completed')->sum('total_cost');
             return Inertia::render('Backend/Dashboard', [
                 'totalCars' => $totalCars,
-                'availableCars'=>$availableCars,
+                'availableCars' => $availableCars,
                 'totalRentals' => $totalRentals,
                 'totalEarnings' => $totalEarnings
             ]);
@@ -75,6 +75,7 @@ class PageController extends Controller
     {
         try {
             $rentals = Rental::join('users', 'users.id', '=', 'rentals.user_id')->join('cars', 'cars.id', '=', 'rentals.car_id')
+                ->orderBy('updated_at', 'desc')
                 ->get(['users.name AS customer_name', 'cars.name AS car_name', 'cars.brand AS car_brand', 'rentals.*']);
             return inertia('Backend/Rentals/ListRental', [
                 'rentals' => $rentals,

@@ -14,10 +14,12 @@ use Inertia\Inertia;
 class CustomerController extends Controller
 {
 
-    function createCustomer(Request $request){
+    function createCustomer(Request $request)
+    {
         return Inertia::render('Backend/Customers/AddCustomer');
     }
-    function saveCustomer(Request $request){
+    function saveCustomer(Request $request)
+    {
         try {
             $request->validate([
                 'name' => 'required|string||max:100',
@@ -39,14 +41,16 @@ class CustomerController extends Controller
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
-    function editCustomer(String $id){
-        $customerID=$id;
-        $theCustomer = User::where('id',$customerID)->first();
+    function editCustomer(String $id)
+    {
+        $customerID = $id;
+        $theCustomer = User::where('id', $customerID)->first();
         return Inertia::render('Backend/Customers/EditCustomer', [
             'customer' => $theCustomer,
         ]);
     }
-    function updateCustomer(Request $request, String $id){
+    function updateCustomer(Request $request, String $id)
+    {
         try {
             $request->validate([
                 'name' => 'required|string|max:100',
@@ -58,12 +62,12 @@ class CustomerController extends Controller
 
             $data = [
                 'name' => $request->name,
-                'email'=> $request->email,
+                'email' => $request->email,
                 'phone' => $request->phone,
                 'address' => $request->address,
             ];
 
-            if($request->filled('password')) {
+            if ($request->filled('password')) {
                 $data['password'] = $request->password;
             }
 
@@ -74,9 +78,10 @@ class CustomerController extends Controller
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
-    function deleteCustomer(String $id){
+    function deleteCustomer(String $id)
+    {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('dashboard.customers')->with('success','Customer deleted successfully.');
+        return redirect()->route('dashboard.customers')->with('success', 'Customer deleted successfully.');
     }
 }

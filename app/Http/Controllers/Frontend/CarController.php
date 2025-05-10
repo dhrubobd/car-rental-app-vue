@@ -17,8 +17,7 @@ class CarController extends Controller
         $cars = Car::query();
 
         if (!empty($search)) {
-            $cars = Car::where('availability',true)
-            ->whereAny([
+            $cars = Car::whereAny([
                 'name',
                 'brand',
                 'model',
@@ -27,20 +26,18 @@ class CarController extends Controller
             ], 'like', "%$search%");
         }
         if (!empty($min_price)) {
-            $cars = $cars->where('availability',true)
-            ->where(function ($query) use ($min_price) {
+            $cars = $cars->where(function ($query) use ($min_price) {
                 $query->where("daily_rent_price", ">=", $min_price);
             });
         }
 
         if (!empty($max_price)) {
-            $cars = $cars->where('availability',true)
-            ->where(function ($query) use ($max_price) {
+            $cars = $cars->where(function ($query) use ($max_price) {
                 $query->where("daily_rent_price", "<=", $max_price);
             });
         }
         return Inertia::render('Frontend/Cars',[
-            'cars'=>$cars->orderBy('updated_at', 'desc')->get(),
+            'cars'=>$cars->where('availability', true)->orderBy('updated_at', 'desc')->get(),
         ]);
     }
 
