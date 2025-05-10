@@ -15,11 +15,11 @@ Follow the steps below to set up the project:
 - Set your mail credentials in the .env file.
 - Run php artisan migrate:refresh --seed or You can download Database.sql.zip file from Root folder and import the data into your MySQL database.
 - Run php artisan serve to start the test server.
-- Open http://127.0.0.1:8000/ on your browser.
+- Open http://localhost:8000/ on your browser.
 
 ## Customer Login Access
 
-Please complete registration **[HERE](http://127.0.0.1:8000/registration)** with your valid email address to get a customer login access.
+Please complete registration **[HERE](http://localhost:8000/register)** with your valid email address to get a customer login access.
 
 ## Admin Login Access
 
